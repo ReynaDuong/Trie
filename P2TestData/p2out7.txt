@@ -1,0 +1,53 @@
+Word inserted
+Word inserted
+Word inserted
+Word inserted
+Word inserted
+Word inserted
+Word inserted
+Word inserted
+Word inserted
+Word inserted
+Word inserted
+Word already exists
+Word inserted
+Word inserted
+Word inserted
+Word inserted
+Word inserted
+Word inserted
+Word inserted
+Word inserted
+Word inserted
+Membership is   20
+Word deleted
+Word not found
+Word deleted
+Word not found
+Membership is   18
+Word found
+Word found
+Word found
+Word not found
+Spelling mistake pert
+Spelling mistake interpretacion
+Spelling mistake anteler
+Spelling OK frog
+ant
+antler
+arts
+coat
+fries
+frog
+from
+frond
+go
+goad
+goal
+goat
+interpretation
+mean
+message
+part
+past
+text

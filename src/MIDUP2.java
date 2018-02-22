@@ -82,6 +82,7 @@ public class MIDUP2 {
                     break;
 
                 case PRINT:
+                    System.out.println("Membership is " + myTrie.membership());
                     break;
 
                 case SPELLING:
@@ -96,6 +97,7 @@ public class MIDUP2 {
                     break;
 
                 default:    // Print all the words
+                    myTrie.listAll();
             }
         }
         while(!line.equals(END));
@@ -196,25 +198,73 @@ class Trie{
         }
         else{
             // delete the node
+            delete(root, s, 0, s.length());
             return true;
         }
     }
 
+    private void delete(Node pNode, String key, int level, int length){
+//        if (pNode != null){
+//            // base case
+//            if (level == length){
+//                // if the node has children
+//                if (pNode.outDegree > 0){
+//                    // part of another word, remover terminal value
+//                    pNode.terminal = false;
+//                }
+//                else{
+//                    pNode = null;
+//                    // update the outDegree of its parent node
+//                }
+//            }
+//            else { // recursive case
+//                int index = key[level]
+//            }
+//
+//        }
+    }
     /**
      * return the number of words in the data structure
-     * @return
+     * @return number of words in Trie
      */
     int membership(){
-        int num = 0;
+        return membership(root);
+    }
 
-        return num;
+
+    private int membership(Node temp){
+        int result = 0;
+
+        // Leaf denotes end of a word
+        if (temp.terminal) {
+            result++;
+        }
+
+        for (int i = 0; i < MIDUP2.ALPHABET_SIZE; i++) {
+            if (temp.children[i] != null) {
+                result += membership(temp.children[i]);
+            }
+        }
+        return result;
     }
 
     /**
      * list all the members of the Trie in alphabetical order
      */
     void listAll(){
+        traverse("", root);
+    }
 
+
+    private void traverse(String prefix, Node temp){
+        if (temp.outDegree > 0){
+            System.out.print(prefix);
+        }
+
+        for (char index = 0; index < MIDUP2.ALPHABET_SIZE; ++index) {
+            if (temp.children[index] != null)
+                traverse(prefix + ('a' + index), temp.children[index]);
+        }
     }
 
 
