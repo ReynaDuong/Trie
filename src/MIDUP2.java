@@ -198,31 +198,120 @@ class Trie{
         }
         else{
             // delete the node
-            delete(root, s, 0, s.length());
+            deleteHelper(s, root, s.length(), 0);
             return true;
         }
     }
 
-    private void delete(Node pNode, String key, int level, int length){
-//        if (pNode != null){
-//            // base case
-//            if (level == length){
-//                // if the node has children
-//                if (pNode.outDegree > 0){
-//                    // part of another word, remover terminal value
-//                    pNode.terminal = false;
-//                }
-//                else{
-//                    pNode = null;
-//                    // update the outDegree of its parent node
-//                }
-//            }
-//            else { // recursive case
-//                int index = key[level]
-//            }
-//
-//        }
+    private boolean deleteHelper(String key, Node current, int length, int level){
+        boolean deleteSelf = false;
+
+        // base case
+        if (level == length){
+
+            // if the node has no children
+            if (hasNoChildren(current)){
+                // affect the parent node degree
+                current = null;
+                deleteSelf = true;
+                updateDegree(key);
+            }
+            else{ // if the node is prefix of another string
+                // unmark the end of the word
+                // degree is not affected
+                current.terminal = false;
+                deleteSelf = false;
+            }
+        }
+        else{   // recursive case
+            Node childNode = current.children[getIndex(key.charAt(level))];
+
+            boolean childDeleted = deleteHelper(key, childNode, length, level + 1);
+
+            updateDegree(key);
+
+            if (childDeleted){
+                // making the children node null
+                current.children[getIndex(key.charAt(level))] = null;
+
+                countChildren(current);
+
+                // part of another node
+                // cannot delete
+                if (current.terminal){
+                    deleteSelf = false;
+                }
+                else if (!hasNoChildren(current)){
+                    // have more than one children
+                    // cannot delete
+                    deleteSelf = false;
+                }
+                else{
+                    // delete node
+                    current = null;
+//                    updateDegree(key);
+                    deleteSelf = true;
+                }
+            }
+            else{
+                deleteSelf = false;
+            }
+        }
+
+        return deleteSelf;
     }
+
+    private int getIndex(char ch){
+        return (ch - 'a');
+    }
+
+    private boolean hasNoChildren(Node temp){
+        for (int i = 0; i < temp.children.length; i++){
+            if (temp.children[i] != null){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    private void countChildren(Node temp){
+        int degree = 0;
+
+        for (int i = 0; i < MIDUP2.ALPHABET_SIZE; i++){
+            if (temp.children[i] != null){
+                degree++;
+            }
+        }
+
+        temp.outDegree = degree;
+    }
+
+    private void updateDegree(String prefix){
+        // goes from the top to search for the prefix until getting a null
+        int level;
+        int length = prefix.length();
+        int index;
+        Node temp = root;
+
+        countChildren(root);
+
+        for (level = 0; level < length; level++)
+        {
+            index = getIndex(prefix.charAt(level));
+
+            if (temp.children[index] == null) {
+                break;
+            }
+            else{
+                countChildren(temp.children[index]);
+            }
+
+            temp = temp.children[index];
+        }
+
+    }
+
     /**
      * return the number of words in the data structure
      * @return number of words in Trie
@@ -248,25 +337,13 @@ class Trie{
         return result;
     }
 
+
+
     /**
      * list all the members of the Trie in alphabetical order
      */
     void listAll(){
-        traverse("", root);
     }
-
-
-    private void traverse(String prefix, Node temp){
-        if (temp.outDegree > 0){
-            System.out.print(prefix);
-        }
-
-        for (char index = 0; index < MIDUP2.ALPHABET_SIZE; ++index) {
-            if (temp.children[index] != null)
-                traverse(prefix + ('a' + index), temp.children[index]);
-        }
-    }
-
 
 
 }
